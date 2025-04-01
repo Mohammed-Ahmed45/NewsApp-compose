@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">NewsApp</string>
+    <string name="title_activity_alerts">AlertsActivity</string>
+    <string name="sports">sports</string>
+    <string name="science">science</string>
+    <string name="health">health</string>
+    <string name="business">business</string>
+    <string name="technology">technology</string>
+    <string name="general">general</string>
+    <string name="check_your_internet_connection">somthing went to wrong</string>
+    <string name="somthing_went_to_wrong">somthing went to wrong</string>
+    <string name="empty"></string>
+    <string name="retry">Retry</string>
+    <string name="no">No</string>
+    <string name="Cancel">Cancel</string>
+
+</resources>
