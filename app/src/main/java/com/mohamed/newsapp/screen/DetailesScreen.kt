@@ -12,13 +12,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,29 +20,24 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.mohamed.newsapp.R
-import com.mohamed.newsapp.api.ApiManager
-import com.mohamed.newsapp.api.handleError
-import com.mohamed.newsapp.api.response.ArticlesItem
-import com.mohamed.newsapp.api.response.ArticlesResponse
+import com.mohamed.newsapp.news.NewsViewModel
 import com.mohamed.newsapp.ui.ui.theme.Colors
 import com.mohamed.newsapp.utils.ErrorDialog
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun DetailsScreen(title: String)
+fun DetailsScreen(
+    title: String,
+    viewModel: NewsViewModel = hiltViewModel()
+)
 {
     val decodedTitle = Uri.decode(title)
-    val articlesItem = remember { mutableStateListOf<ArticlesItem>() }
-    val isLoading = remember { mutableStateOf(true) }
-    val errorMessage = remember { mutableIntStateOf(R.string.empty) }
     LaunchedEffect(decodedTitle) {
-        getDetails(decodedTitle, articlesItem, errorMessage, isLoading)
+        viewModel.getDetails(decodedTitle)
     }
 
     Column(
@@ -57,9 +45,9 @@ fun DetailsScreen(title: String)
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        if (articlesItem.isNotEmpty())
+        if (viewModel.articlesItem.isNotEmpty())
         {
-            val article = articlesItem[0]
+            val article = viewModel.articlesItem[0]
             GlideImage(
                 model = article.urlToImage ?: "",
                 contentDescription = "Article Image",
@@ -93,13 +81,13 @@ fun DetailsScreen(title: String)
                 overflow = TextOverflow.Ellipsis
             )
         }
-        ErrorDialog(errorState = errorMessage) {
-            isLoading.value = true
-            articlesItem.clear()
-            getDetails(title, articlesItem, errorMessage, isLoading)
+        ErrorDialog(errorState = viewModel.errorMessage) {
+            viewModel.isLoading.value = true
+            viewModel.articlesItem.clear()
+            viewModel.getDetails(title)
         }
 
-        if (isLoading.value)
+        if (viewModel.isLoading.value)
         {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -111,39 +99,6 @@ fun DetailsScreen(title: String)
     }
 }
 
-fun getDetails(
-    title: String,
-    articlesItem: SnapshotStateList<ArticlesItem>,
-    errorMessage: MutableIntState,
-    isLoading: MutableState<Boolean>
-)
-{
-    ApiManager.getNewsService().getNewsSourcesSelected(title = title)
-        .enqueue(object : Callback<ArticlesResponse>
-        {
-            override fun onResponse(
-                call: Call<ArticlesResponse>,
-                response: Response<ArticlesResponse>
-            )
-            {
-
-                isLoading.value = false
-                val responseBody = response.body()
-                if (!responseBody?.articles.isNullOrEmpty())
-                {
-                    articlesItem.clear()
-                    articlesItem.addAll(responseBody!!.articles!!)
-                }
-            }
-
-            override fun onFailure(call: Call<ArticlesResponse>, t: Throwable)
-            {
-                isLoading.value = false
-                errorMessage.intValue = handleError(t)
-
-            }
-        })
-}
 
 //@Preview
 //@Composable

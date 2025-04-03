@@ -1,18 +1,35 @@
 package com.mohamed.newsapp.api
 
 import android.util.Log
+import com.mohamed.newsapp.di.NewsAuthInterceptor
+import com.mohamed.newsapp.di.NewsHttpLoggingInterceptor
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Singleton
 
+// 1. Declare Module
+// 2. inject Dependencies
+
+@Module
+@InstallIn(SingletonComponent::class)
 object ApiManager
 {
-    val BASE_URL = "https://newsapi.org/"
-    lateinit var retrofit: Retrofit
 
+    @Provides
+    @Singleton
+    fun providesBaseUrl(): String = "https://newsapi.org/"
 
-    private fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor
+    @Provides
+    @Singleton
+    @NewsHttpLoggingInterceptor
+    fun provideHttpLoggingInterceptor(): Interceptor
     {
         val httpLoggingInterceptor = HttpLoggingInterceptor { message ->
             Log.e("Api", message)
@@ -27,32 +44,61 @@ object ApiManager
 //            .build()
 //    }
 
-    private fun provideOkHttpClient(): OkHttpClient
+    @Provides
+    @Singleton
+    @NewsAuthInterceptor
+    fun authApiKeyInterceptor(): Interceptor
     {
-        val okHttpClient = OkHttpClient
-            .Builder()
-            .addInterceptor(AuthApiKeyInterceptor())
-            .addInterceptor(provideHttpLoggingInterceptor())
+        return AuthApiKeyInterceptor()
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(
+        @NewsAuthInterceptor authApiKeyInterceptor: Interceptor,
+        @NewsHttpLoggingInterceptor httpLoggingInterceptor: Interceptor
+    ): OkHttpClient
+    {
+        return OkHttpClient.Builder()
+            .addInterceptor(authApiKeyInterceptor)
+            .addInterceptor(httpLoggingInterceptor)
             .build()
-        return okHttpClient
+
+    }
+//
+//    init
+//    {
+//        initRetrofit()
+//    }
+
+    @Provides
+    @Singleton
+    fun provideGsonConverterFactory(): GsonConverterFactory
+    {
+        return GsonConverterFactory.create()
     }
 
-    init
-    {
-        initRetrofit()
-    }
+    @Provides
+    @Singleton
+    fun initRetrofit(
+        baseUrl: String,
+        gsonConverterFactory: GsonConverterFactory,
+        okHttpClient: OkHttpClient,
 
-    fun initRetrofit()
+        ): Retrofit
     {
 
-        retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(provideOkHttpClient())
+        return Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(gsonConverterFactory)
+            .client(okHttpClient)
             .build()
     }
 
-    fun getNewsService(): ApiService
+
+    @Provides
+    @Singleton
+    fun getNewsService(retrofit: Retrofit): ApiService
     {
         return retrofit.create(ApiService::class.java)
     }

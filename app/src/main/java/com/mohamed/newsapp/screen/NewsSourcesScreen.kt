@@ -17,92 +17,70 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mohamed.newsapp.R
-import com.mohamed.newsapp.api.ApiManager
-import com.mohamed.newsapp.api.handleError
-import com.mohamed.newsapp.api.response.SourcesItem
-import com.mohamed.newsapp.api.response.SourcesResponse
 import com.mohamed.newsapp.news.NewsViewModel
 import com.mohamed.newsapp.ui.ui.theme.Colors
 import com.mohamed.newsapp.utils.ErrorDialog
 import kotlinx.coroutines.delay
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
 fun NewsSourcesScreen(
     categoryId: String,
-    viewModel: NewsViewModel = viewModel(),
+    viewModel: NewsViewModel = hiltViewModel(),
     navController: NavController
 )
 {
-
-    val sourcesList = remember { mutableStateListOf<SourcesItem>() }
-    val navSelectedSourcesId = remember { mutableStateOf("") }
-    var selectedTabPage by remember { mutableIntStateOf(0) }
-    val errorMessage = remember { mutableIntStateOf(R.string.empty) }
-    val isLoading = remember { mutableStateOf(true) }
-    var isVisible by remember { mutableStateOf(false) }
-
     LaunchedEffect(categoryId) {
-        getSources(categoryId, sourcesList, errorMessage, isLoading)
-        isVisible = true
+        viewModel.getSources(categoryId)
+        viewModel.isVisible.value = true
     }
 
 
     Column {
-        if (sourcesList.isNotEmpty())
+        if (viewModel.sourcesList.isNotEmpty())
             AnimatedVisibility(
-                visible = sourcesList.isNotEmpty(),
+                visible = viewModel.sourcesList.isNotEmpty(),
                 enter = fadeIn() + slideInVertically { -it }
             ) {
                 NewsScrollableTabRow(
-                    sourcesList = sourcesList,
-                    selectedTabIndex = selectedTabPage,
-                    navSelectedSourcesId = navSelectedSourcesId,
+                    selectedTabIndex = viewModel.selectedTabPage.intValue,
                     onTabSelected = { page, id ->
-                        selectedTabPage = page
-                        navSelectedSourcesId.value = id
+                        viewModel.selectedTabPage.intValue = page
+                        viewModel.navSelectedSourcesId.value = id
                     }
                 )
             }
 
         AnimatedVisibility(
-            visible = navSelectedSourcesId.value.isNotEmpty(),
+            visible = viewModel.navSelectedSourcesId.value.isNotEmpty(),
             enter = fadeIn() + slideInVertically { -it }
         ) {
+
             NewsArticlesContent(
-                selectedSourcesId = navSelectedSourcesId.value,
+                selectedSourcesId = viewModel.navSelectedSourcesId,
                 navController = navController
             )
         }
     }
 
-    ErrorDialog(errorState = errorMessage) {
-        isLoading.value = true
-        sourcesList.clear()
-        getSources(categoryId, sourcesList, errorMessage, isLoading)
+    ErrorDialog(errorState = viewModel.errorMessage) {
+        viewModel.isLoading.value = true
+        viewModel.sourcesList.clear()
+        viewModel.getSources(categoryId)
     }
 
-    if (isLoading.value)
+    if (viewModel.isLoading.value)
     {
         Box(
             modifier = Modifier.fillMaxSize(),
@@ -114,54 +92,10 @@ fun NewsSourcesScreen(
 
 }
 
-fun getSources(
-    categoryId: String,
-    sourcesList: SnapshotStateList<SourcesItem>,
-
-    errorMessage: MutableIntState,
-    isLoading: MutableState<Boolean>
-)
-{
-    ApiManager.getNewsService().getSources(categoryId = categoryId)
-        .enqueue(object : Callback<SourcesResponse>
-        {
-            override fun onResponse(
-                call: Call<SourcesResponse>,
-                response: Response<SourcesResponse>
-            )
-            {
-                isLoading.value = false
-//                    response.body()?.sources?.let { sourcesList.addAll(it) }
-                if (response.isSuccessful)
-                {
-                    val responseBody = response.body()
-                    if (responseBody?.sources?.isNotEmpty() == true)
-                    {
-                        sourcesList.clear()
-                        sourcesList.addAll(responseBody.sources)
-
-                    }
-                } else
-                {
-//                    handleError(response)
-                }
-
-
-            }
-
-            override fun onFailure(p0: Call<SourcesResponse>, t: Throwable)
-            {
-                isLoading.value = false
-                errorMessage.intValue = handleError(t)
-            }
-
-        })
-}
 
 @Composable
 fun NewsScrollableTabRow(
-    sourcesList: List<SourcesItem>,
-    navSelectedSourcesId: MutableState<String>,
+    viewModel: NewsViewModel = hiltViewModel(),
     selectedTabIndex: Int,
     onTabSelected: (index: Int, id: String) -> Unit
 )
@@ -175,17 +109,23 @@ fun NewsScrollableTabRow(
 
 
     LaunchedEffect(Unit) {
-        navSelectedSourcesId.value = sourcesList[0].id ?: ""
+        if (viewModel.sourcesList.isNotEmpty() && viewModel.selectedTabPage.intValue == 0)
+        {
+            viewModel.navSelectedSourcesId.value = viewModel.sourcesList.firstOrNull()?.id ?: ""
+        } else
+        {
+            viewModel.selectedTabPage.intValue = selectedTabIndex
+
+        }
+
     }
 
     ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
         indicator = {}, divider = {}, edgePadding = 0.dp
     ) {
-        sourcesList.forEachIndexed { index, sourcesItem ->
+        viewModel.sourcesList.forEachIndexed { index, sourcesItem ->
             var isVisible by remember { mutableStateOf(false) }
-
-
             LaunchedEffect(Unit) {
                 delay(index * 150L)
                 isVisible = true
@@ -199,7 +139,10 @@ fun NewsScrollableTabRow(
                 Tab(
                     selected = selectedTabIndex == index,
                     onClick = {
-                        onTabSelected(index, sourcesItem.id ?: "")
+                        if (index < viewModel.sourcesList.size)
+                        {
+                            onTabSelected(index, sourcesItem.id ?: "")
+                        }
                     },
                     selectedContentColor = Color.White,
                     unselectedContentColor = Colors.green,

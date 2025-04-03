@@ -45,8 +45,10 @@ import com.mohamed.newsapp.list.categories
 import com.mohamed.newsapp.navigation.Nav
 import com.mohamed.newsapp.ui.theme.NewsAppTheme
 import com.mohamed.newsapp.utils.CategoryCard
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity()
 {
     override fun onCreate(savedInstanceState: Bundle?)
