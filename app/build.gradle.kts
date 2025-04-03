@@ -2,8 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     id("kotlin-parcelize")
-    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
-
+    id("kotlin-kapt")
+//    id("org.jetbrains.kotlin.plugin.serialization") version "1.9.0"
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -89,6 +90,12 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     // LiveData
     implementation(libs.androidx.lifecycle.livedata.ktx)
+    //dagger hilt
+    implementation(libs.hilt.android)
+    kapt(libs.dagger.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
-
+}
+kapt {
+    correctErrorTypes = true
 }

@@ -3,6 +3,7 @@ package com.mohamed.newsapp.api
 import okhttp3.Interceptor
 import okhttp3.Response
 
+
 class AuthApiKeyInterceptor : Interceptor
 {
     val authorization = "Authorization"
