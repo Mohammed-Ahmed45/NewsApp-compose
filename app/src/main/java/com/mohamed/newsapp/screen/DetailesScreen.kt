@@ -93,7 +93,7 @@ fun DetailsScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(color = Colors.green)
+                CircularProgressIndicator(color = Colors.Green)
             }
         }
     }
