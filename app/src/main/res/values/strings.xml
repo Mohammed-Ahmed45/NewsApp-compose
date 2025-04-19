@@ -13,5 +13,7 @@
     <string name="retry">Retry</string>
     <string name="no">No</string>
     <string name="Cancel">Cancel</string>
+    <string name="newsApp">News App</string>
+    <string name="settings">Settings</string>
 
 </resources>

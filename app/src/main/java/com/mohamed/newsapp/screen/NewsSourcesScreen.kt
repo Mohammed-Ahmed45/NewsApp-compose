@@ -86,7 +86,7 @@ fun NewsSourcesScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator(color = Colors.green)
+            CircularProgressIndicator(color = Colors.Green)
         }
     }
 
@@ -101,10 +101,10 @@ fun NewsScrollableTabRow(
 )
 {
     val selectedModifier = Modifier
-        .background(Colors.green, CircleShape)
+        .background(Colors.Green, CircleShape)
         .padding(4.dp)
     val unSelectedModifier = Modifier
-        .border(2.dp, Colors.green, CircleShape)
+        .border(2.dp, Colors.Green, CircleShape)
         .padding(4.dp)
 
 
@@ -145,7 +145,7 @@ fun NewsScrollableTabRow(
                         }
                     },
                     selectedContentColor = Color.White,
-                    unselectedContentColor = Colors.green,
+                    unselectedContentColor = Colors.Green,
                     modifier = if (selectedTabIndex == index)
                     {
                         selectedModifier
