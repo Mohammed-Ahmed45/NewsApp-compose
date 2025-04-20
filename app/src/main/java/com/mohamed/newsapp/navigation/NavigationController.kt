@@ -1,6 +1,9 @@
 package com.mohamed.newsapp.navigation
 
+import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -9,6 +12,8 @@ import androidx.navigation.navArgument
 import com.mohamed.newsapp.CategoryScreen
 import com.mohamed.newsapp.screen.DetailsScreen
 import com.mohamed.newsapp.screen.NewsSourcesScreen
+import com.mohamed.newsapp.screen.SettingsScreen
+import com.mohamed.newsapp.screen.SplashScreen
 
 object Route
 {
@@ -16,16 +21,20 @@ object Route
     const val CATEGORIES = "categories"
     const val NEWS_SOURCES = "news_sources"
     const val DETAILS_SCREEN = "details_screen"
+    const val SETTINGS_SCREEN = "settings_screen"
 }
 
 @Composable
 fun Nav()
 {
     val navController = rememberNavController()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
 
     NavHost(navController = navController, startDestination = Route.SPLASH) {
         composable(Route.SPLASH) { SplashScreen(navController) }
         composable(Route.CATEGORIES) { CategoryScreen(navController) }
+        composable(Route.SETTINGS_SCREEN) { SettingsScreen(scope, drawerState, navController) }
 
         composable(
             route = "${Route.NEWS_SOURCES}/{categoryId}",
