@@ -1,4 +1,4 @@
-package com.mohamed.newsapp.api
+package com.mohamed.newsapp.api.model
 
 import com.mohamed.newsapp.api.response.ArticlesResponse
 import com.mohamed.newsapp.api.response.SourcesResponse

@@ -1,4 +1,4 @@
-package com.mohamed.newsapp.api
+package com.mohamed.newsapp.api.model
 
 import android.util.Log
 import com.mohamed.newsapp.di.NewsAuthInterceptor

@@ -85,17 +85,31 @@ fun ArticlesCard(article: ArticlesItem, navHostController: NavController)
                 navHostController.navigate("${Route.DETAILS_SCREEN}/${Uri.encode(article.title)}")
             },
     ) {
-        GlideImage(
-            model = article.urlToImage
-                ?: Image(painterResource(id = R.drawable.ic_launcher_foreground), ""),
-            contentDescription = "Article Image",
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-                .height(250.dp)
-                .clip(RoundedCornerShape(10.dp)),
-            contentScale = ContentScale.Crop
-        )
+        val imageUrl = article.urlToImage
+
+        if (!imageUrl.isNullOrEmpty()) {
+            GlideImage(
+                model = imageUrl,
+                contentDescription = "Article Image",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.ic_news),
+                contentDescription = "Default Image",
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
+                    .height(250.dp)
+                    .clip(RoundedCornerShape(10.dp)),
+                contentScale = ContentScale.Crop
+            )
+        }
 
         Text(
             text = article.source?.name ?: "Unknown",
