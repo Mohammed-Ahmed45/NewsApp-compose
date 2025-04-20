@@ -8,8 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mohamed.newsapp.R
-import com.mohamed.newsapp.api.ApiService
-import com.mohamed.newsapp.api.handleError
+import com.mohamed.newsapp.api.model.ApiService
+import com.mohamed.newsapp.api.model.handleError
 import com.mohamed.newsapp.api.response.ArticlesItem
 import com.mohamed.newsapp.api.response.SourcesItem
 import dagger.hilt.android.lifecycle.HiltViewModel
