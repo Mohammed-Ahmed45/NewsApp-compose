@@ -98,8 +98,7 @@ fun NewsScrollableTabRow(
     viewModel: NewsViewModel = hiltViewModel(),
     selectedTabIndex: Int,
     onTabSelected: (index: Int, id: String) -> Unit
-)
-{
+) {
     val selectedModifier = Modifier
         .background(Colors.Green, CircleShape)
         .padding(4.dp)
@@ -109,11 +108,9 @@ fun NewsScrollableTabRow(
 
 
     LaunchedEffect(Unit) {
-        if (viewModel.sourcesList.isNotEmpty() && viewModel.selectedTabPage.intValue == 0)
-        {
+        if (viewModel.sourcesList.isNotEmpty() && viewModel.selectedTabPage.intValue == 0) {
             viewModel.navSelectedSourcesId.value = viewModel.sourcesList.firstOrNull()?.id ?: ""
-        } else
-        {
+        } else {
             viewModel.selectedTabPage.intValue = selectedTabIndex
 
         }
@@ -123,6 +120,7 @@ fun NewsScrollableTabRow(
     ScrollableTabRow(
         selectedTabIndex = selectedTabIndex,
         indicator = {}, divider = {}, edgePadding = 0.dp
+
     ) {
         viewModel.sourcesList.forEachIndexed { index, sourcesItem ->
             var isVisible by remember { mutableStateOf(false) }
@@ -136,22 +134,27 @@ fun NewsScrollableTabRow(
                 visible = isVisible,
                 enter = fadeIn() + slideInVertically(initialOffsetY = { it / 2 })
             ) {
-                Tab(
-                    selected = selectedTabIndex == index,
-                    onClick = {
-                        if (index < viewModel.sourcesList.size)
-                        {
-                            onTabSelected(index, sourcesItem.id ?: "")
-                        }
-                    },
-                    selectedContentColor = Color.White,
-                    unselectedContentColor = Colors.Green,
-                    modifier = if (selectedTabIndex == index)
-                    {
-                        selectedModifier
-                    } else unSelectedModifier
+                Box(
+                    modifier = Modifier.padding(4.dp)
                 ) {
-                    Text(text = sourcesItem.name ?: "")
+                    Tab(
+                        selected = selectedTabIndex == index,
+                        onClick = {
+                            if (index < viewModel.sourcesList.size) {
+                                onTabSelected(index, sourcesItem.id ?: "")
+                            }
+                        },
+                        selectedContentColor = Color.White,
+                        unselectedContentColor = Colors.Green,
+                        modifier =
+                            (if (selectedTabIndex == index) {
+                                selectedModifier
+                            } else unSelectedModifier
+                                    ).padding(10.dp)
+
+                    ) {
+                        Text(text = sourcesItem.name ?: "")
+                    }
                 }
             }
         }

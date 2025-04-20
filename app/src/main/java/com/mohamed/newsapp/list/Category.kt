@@ -20,35 +20,35 @@ val categories = listOf(
         categoryId = "sports",
         image = R.drawable.img_sports,
         text = "Sports",
-        color = Color.Red
+        color = Colors.Red
     ),
     Category(
         name = "technology",
         categoryId = "technology",
         image = R.drawable.img_politics,
         text = "Politics",
-        color = Color.Blue
+        color = Colors.Blue
     ),
     Category(
         name = "health",
         categoryId = "health",
         image = R.drawable.img_health,
         text = "Health",
-        color = Colors.dark_blue
+        color = Colors.Purple
     ),
     Category(
         name = "business",
         categoryId = "business",
         image = R.drawable.img_bussines,
         text = "business",
-        color = Color.Magenta
+        color = Colors.Orange
     ),
     Category(
         name = "science",
         categoryId = "science",
         image = R.drawable.img_science,
         text = "Science",
-        color = Color.Green
+        color = Colors.Green
     ),
     Category(
         name = "general",
@@ -57,4 +57,5 @@ val categories = listOf(
         text = "Environment",
         color = Color.DarkGray
     ),
-)
+
+    )

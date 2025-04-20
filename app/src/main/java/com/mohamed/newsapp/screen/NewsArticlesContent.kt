@@ -6,7 +6,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.mohamed.newsapp.news.NewsViewModel
@@ -29,17 +28,9 @@ fun NewsArticlesContent(
     LazyColumn {
         itemsIndexed(viewModel.articlesItem) { index, article ->
             AnimatedVisibility(visible = viewModel.visibleItems.getOrNull(index) == true) {
-//                if (viewModel.navSelectedSourcesId==viewModel.selectedTabPage)
                 ArticlesCard(article, navHostController = navController)
             }
         }
     }
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun PrevNews()
-{
-//    val selectedSourcesId = ""
-// NewsArticlesSources(selectedSourcesId, navController = )
-}

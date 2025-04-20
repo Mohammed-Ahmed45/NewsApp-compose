@@ -1,4 +1,4 @@
-package com.mohamed.newsapp.api
+package com.mohamed.newsapp.api.model
 
 import okhttp3.Interceptor
 import okhttp3.Response
