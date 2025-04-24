@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mohamed.newsapp.R
+import com.mohamed.newsapp.ui.ui.theme.Colors
 
 @Composable
 fun ErrorDialog(
@@ -32,7 +33,7 @@ fun ErrorDialog(
                         errorState.intValue = R.string.empty
                     }
                 ) {
-                    Text(stringResource(R.string.retry), color = Color.Green)
+                    Text(stringResource(R.string.retry), color = Colors.Green)
                 }
             }, text = {
                 Text(text = stringResource(id = errorState.intValue))
@@ -44,7 +45,7 @@ fun ErrorDialog(
                         errorState.intValue = R.string.empty
                     }
                 ) {
-                    Text(stringResource(R.string.Cancel), color = Color.Green)
+                    Text(stringResource(R.string.Cancel), color = Colors.Green)
                 }
             }
 
