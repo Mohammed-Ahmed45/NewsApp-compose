@@ -1,7 +1,7 @@
-package com.mohamed.newsapp.api.model
+package com.example.data.api.model
 
-import com.mohamed.newsapp.api.response.ArticlesResponse
-import com.mohamed.newsapp.api.response.SourcesResponse
+import com.example.data.api.response.ArticlesResponse
+import com.example.data.api.response.SourcesResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -9,9 +9,7 @@ import retrofit2.http.Query
 interface ApiService
 {
     @GET("/v2/top-headlines/sources")
-    suspend fun getSources(
-        @Query("category") categoryId: String? = null,
-    ): Response<SourcesResponse>
+    suspend fun getSources(@Query("category") categoryId: String? = null): Response<SourcesResponse>
 
     @GET("/v2/everything")
     suspend fun getNewsSourcesSelected(

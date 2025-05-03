@@ -1,8 +1,8 @@
-package com.mohamed.newsapp.api.model
+package com.example.data.api.model
 
 import android.util.Log
-import com.mohamed.newsapp.di.NewsAuthInterceptor
-import com.mohamed.newsapp.di.NewsHttpLoggingInterceptor
+import com.example.data.di.NewsAuthInterceptor
+import com.example.data.di.NewsHttpLoggingInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,7 +49,7 @@ object ApiManager
     @NewsAuthInterceptor
     fun authApiKeyInterceptor(): Interceptor
     {
-        return AuthApiKeyInterceptor()
+        return com.example.data.api.model.AuthApiKeyInterceptor()
     }
 
     @Provides

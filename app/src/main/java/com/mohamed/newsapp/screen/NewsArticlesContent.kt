@@ -8,8 +8,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.mohamed.newsapp.news.NewsViewModel
 import com.mohamed.newsapp.utils.ArticlesCard
+import com.mohamed.newsapp.viewmodel.NewsViewModel
 
 
 @Composable

@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.example.data.api.response.ArticlesItem
 import com.mohamed.newsapp.R
-import com.mohamed.newsapp.api.response.ArticlesItem
 import com.mohamed.newsapp.list.Category
 import com.mohamed.newsapp.navigation.Route
 
