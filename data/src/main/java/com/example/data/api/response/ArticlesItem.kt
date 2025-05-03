@@ -1,4 +1,4 @@
-package com.mohamed.newsapp.api.response
+package com.example.data.api.response
 
 import com.google.gson.annotations.SerializedName
 

@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.mohamed.newsapp.news.NewsViewModel
 import com.mohamed.newsapp.ui.ui.theme.Colors
 import com.mohamed.newsapp.utils.ErrorDialog
+import com.mohamed.newsapp.viewmodel.NewsViewModel
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -99,10 +99,3 @@ fun DetailsScreen(
     }
 }
 
-
-//@Preview
-//@Composable
-//private fun DetailPrev()
-//{
-//    DetailsScreen(title = "Mr")
-//}

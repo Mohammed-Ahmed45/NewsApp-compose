@@ -1,7 +1,7 @@
-package com.mohamed.newsapp.api.model
+package com.example.data.api.model
 
 import android.util.Log
-import com.mohamed.newsapp.R
+import com.example.data.R
 import java.io.IOException
 import java.net.UnknownHostException
 
