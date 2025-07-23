@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="check_your_internet_connection">check your internet connection</string>
+    <string name="somthing_went_to_wrong">somthing went to wrong</string>
+</resources>
